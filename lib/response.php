@@ -1,4 +1,5 @@
 <?php
+
 class Response {
 
 	const JSON = "json";
@@ -48,34 +49,30 @@ class Response {
 	 * @param    array                    $data    [数据]
 	 * @return   [type]                            [description]
 	 */
-	public static function json($code,$status=true,$message='',$data = array()){
+	public static function json($code,$status=true,$message='',
+		$data = array(),$jsonCallback = 'jsoncallback'){
 		if(!is_numeric($code)){
 			return '';
 		}
+		$callback = isset($_GET[$jsonCallback])?$_GET[$jsonCallback]:'';
+
 		$result=array(
 				'code'=>$code,
                 'status'=>$status,
 				'message'=>$message,
 				'data'=>$data
 			);
-		echo json_encode($result);
-		exit;
-	}
-    
-    public static function jsonp($callback,$code,$status=true,$message='',$data = array()){
-		if(!is_numeric($code)){
-			return '';
+		$result = json_encode($result);
+		if($callback){
+			echo "{$callback}({$result})";
+			//echo $callback.'('.$result.')';
+		}else{
+			echo $result;
 		}
-		$result=array(
-				'code'=>$code,
-                'status'=>$status,
-				'message'=>$message,
-				'data'=>$data
-			);
-		echo $callback.'('.json_encode($result).')';
+		
 		exit;
 	}
-    
+   
 	/**
 	 * [xmlEncode description]
 	 * @Author   KENFO

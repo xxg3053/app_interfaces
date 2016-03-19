@@ -53,7 +53,16 @@ class EasterServer {
 	}
 
 	public static function getLuckPack($awardsID, $gameID, $flag){
-		
+		return 'no data';
 	}
+
+    public static function checkMyGoods(){
+        return 'no data';
+    }
+
+    public static function submitInfo($data){
+        
+        return $data;
+    }
 }
 

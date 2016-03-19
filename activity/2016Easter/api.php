@@ -1,27 +1,42 @@
 <?php
-require_once('../../common/response.php');
+require_once('../../lib/utils.php');
+require_once('../../lib/response.php');
 require_once('EasterServer.php');
 
-$ct = isset($_GET['ct'])?$_GET['ct']:'';
-$ac = isset($_GET['ac'])?$_GET['ac']:'';
-$callback = isset($_GET['jsoncallback'])?$_GET['jsoncallback']:'';
+$u = new Utils();
+$ct = $u->V('ct');
+$ac = $u->V('ac');
 
 if($ct != 'christmas'){
-     Response::json(404,false,'Parameter error','');
+    Response::json(404,false,'Parameter error','');
 }
 
 switch($ac){
     case 'myGift':
-        Response::jsonp($callback,200,true,'OK',EasterServer::myGift());
+        Response::json(200,true,'OK',EasterServer::myGift());
         break;
     case 'getMobileGameGift':
-        Response::jsonp($callback,200,true,'OK',EasterServer::getMobileGameGift('1'));
+        Response::json(200,true,'OK',EasterServer::getMobileGameGift('1'));
         break;
     case 'shakeTree':
-        Response::jsonp($callback,200,true,'OK',EasterServer::shakeTree());
+        Response::json(200,true,'OK',EasterServer::shakeTree());
+        break;
+    case 'myGoods':
+        Response::json(200,true,'OK',EasterServer::checkMyGoods());
+        break;
+    case 'submitInfo':
+        $data['email']    = $u->V('email');
+        $data['fullName'] = $u->V('fullName');
+        $data['address']  = $u->V('address');
+        $data['city']     = $u->V('city');
+        $data['state']    = $u->V('state');
+        $data['zip']      = $u->V('zip');
+        $data['phone']    = $u->V('phone');
+        $data['country']  = $u->V('country');
+        Response::json(200,true,'OK',EasterServer::submitInfo($data));
         break;
     default:
-        Response::jsonp($callback,200,true,'OK',EasterServer::index());
+        Response::json(200,true,'OK',EasterServer::index());
 }
     
 

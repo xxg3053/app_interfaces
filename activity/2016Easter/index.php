@@ -1,2 +1,2 @@
 <?php 
-require "api.php";
+require('api.php');

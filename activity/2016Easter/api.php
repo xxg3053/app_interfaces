@@ -3,9 +3,8 @@ require_once('../../lib/utils.php');
 require_once('../../lib/response.php');
 require_once('EasterServer.php');
 
-$u = new Utils();
-$ct = $u->V('ct');
-$ac = $u->V('ac');
+$ct = Utils::V('ct');
+$ac = Utils::V('ac');
 
 if($ct != 'christmas'){
     Response::json(404,false,'Parameter error','');
@@ -15,8 +14,8 @@ switch($ac){
     case 'myGift':
         Response::json(200,true,'OK',EasterServer::myGift());
         break;
-    case 'getMobileGameGift':
-        Response::json(200,true,'OK',EasterServer::getMobileGameGift('1'));
+    case 'getLuckPack':
+        Response::json(200,true,'OK',EasterServer::getLuckPack(Utils::V('awardsID'), Utils::V('gameID'),Utils::V('flag')));
         break;
     case 'shakeTree':
         Response::json(200,true,'OK',EasterServer::shakeTree());
@@ -25,15 +24,18 @@ switch($ac){
         Response::json(200,true,'OK',EasterServer::checkMyGoods());
         break;
     case 'submitInfo':
-        $data['email']    = $u->V('email');
-        $data['fullName'] = $u->V('fullName');
-        $data['address']  = $u->V('address');
-        $data['city']     = $u->V('city');
-        $data['state']    = $u->V('state');
-        $data['zip']      = $u->V('zip');
-        $data['phone']    = $u->V('phone');
-        $data['country']  = $u->V('country');
+        $data['email']    = Utils::V('email');
+        $data['fullName'] = Utils::V('fullName');
+        $data['address']  = Utils::V('address');
+        $data['city']     = Utils::V('city');
+        $data['state']    = Utils::V('state');
+        $data['zip']      = Utils::V('zip');
+        $data['phone']    = Utils::V('phone');
+        $data['country']  = Utils::V('country');
         Response::json(200,true,'OK',EasterServer::submitInfo($data));
+        break;
+    case 'getCode':
+        Response::json(200,true,'OK',EasterServer::getCode());
         break;
     default:
         Response::json(200,true,'OK',EasterServer::index());

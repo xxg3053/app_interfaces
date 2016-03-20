@@ -4,9 +4,6 @@
  */
 class Utils{
 
-	public $out;
-
-
 	/**
 	 * REQUEST值
 	 *
@@ -15,8 +12,8 @@ class Utils{
 	 * @param string $default 如果取不到，默认值
 	 * @return string
 	 */
-	public function V($name, $type = '', $default = ''){
-		return $this->getValue($name, $_REQUEST, $type, $default);
+	public static function V($name, $type = '', $default = ''){
+		return self::getValue($name, $_REQUEST, $type, $default);
 	}
 	/**
 	 * GET值
@@ -26,8 +23,8 @@ class Utils{
 	 * @param string $default 如果取不到，默认值
 	 * @return string
 	 */
-	protected function get($name, $type = '', $default = ''){
-		return $this->getValue($name, $_GET, $type, $default);
+	protected static function get($name, $type = '', $default = ''){
+		return self::getValue($name, $_GET, $type, $default);
 	}
 	/**
 	 * POST值
@@ -37,13 +34,13 @@ class Utils{
 	 * @param string $default 如果取不到，默认值
 	 * @return string
 	 */
-	protected function post($name, $type = '', $default = ''){
-		return $this->getValue($name, $_POST, $type, $default);
+	protected static function post($name, $type = '', $default = ''){
+		return self::getValue($name, $_POST, $type, $default);
 	}
 
-	private function getValue($name, $data, $type, $default){
+	private static function getValue($name, $data, $type, $default){
 		if(isset($data[$name])){
-			return $this->_ff($data[$name], $type, $default);
+			return self::_ff($data[$name], $type, $default);
 		}else{
 			return $default;
 		}
@@ -52,7 +49,7 @@ class Utils{
 	/*
 	 * 过滤函数
 	 */
-	private function _ff($value, $type = '', $default = ''){
+	private static function _ff($value, $type = '', $default = ''){
 		if(is_array($value)){
 			return array_map(array($this, '_ff'), $value);
 		}else{
@@ -86,31 +83,11 @@ class Utils{
 	/**
 	 * 获取$_SERVER值
 	 */
-	protected function getServer($key = null, $default = null) {
+	protected static function getServer($key = null, $default = null) {
         if (null === $key) {
             return $_SERVER;
         }
 
         return (isset($_SERVER[$key])) ? $_SERVER[$key] : $default;
     }
-	/**
-	 * 输出json或者jsonp字符串
-	 * @param mixed $out 变量
-	 * @param string $jsonCallback getJSON使用的name
-	 */
-	public function json($out = null, $jsonCallback = 'jsoncallback'){
-		$this->outType = '';
-		$callback = $this->get($jsonCallback, '/^\w+$/');
-		if(!is_null($out)){
-			$value = $out;
-		}else{
-			$value = $this->out;
-		}
-		$value = json_encode($value);
-		if($callback){
-			echo "{$callback}({$value})";
-		}else{
-			echo $value;
-		}
-	}
 }
